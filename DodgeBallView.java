@@ -94,6 +94,18 @@ public class DodgeBallView extends View {
         }else{
             rock.rockX = event.getX();
             rock.rockY = event.getY();
+            if(rock.rockX > box.xMax){
+                rock.rockX = box.xMax - rock.rockRadius;
+            }
+            if(rock.rockX < box.xMin){
+                rock.rockX = box.xMin + rock.rockRadius;
+            }
+            if(rock.rockY > box.yMax){
+                rock.rockY = box.yMax - rock.rockRadius;
+            }
+            if(rock.rockY < box.yMin){
+                rock.rockY = box.yMin + rock.rockRadius;
+            }
         }
         return true;
     }
