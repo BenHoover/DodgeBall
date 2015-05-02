@@ -10,14 +10,16 @@ import android.graphics.RectF;
 import java.util.Random;
 
 public class Ball {
-    private float ballRadius = 80; // Ball's radius
-    float ballX = ballRadius + 20;  // Ball's center (x,y)
-    float ballY = ballRadius + 40;
-    float ballSpeedX = 25;  // Ball's speed (x,y)
-    float ballSpeedY = 15;
-    private RectF ballBounds;      // Needed for Canvas.drawOval
-    private Paint paint;           // The paint (e.g. style, color) used for drawing
+    public int ballRadius = 30;
+    float ballX = ballRadius + randInt(0,600);
+    float ballY = ballRadius + randInt(0,1200);
+    public int ballSpeedX = 30;
+    public int ballSpeedY = 15;
+    private RectF ballBounds;
+    private Paint paint;
     private Random rand;
+    public Boolean ballDead = false;
+    public Boolean start = false;
 
     public Ball(int color) {
         ballBounds = new RectF();
@@ -25,12 +27,15 @@ public class Ball {
         paint.setColor(color);
         rand = new Random();
     }
+    public static int randInt(int min, int max) {
+        Random rand = new Random();
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+        return randomNum;
+    }
 
-    public void moveWithCollisionDetection(Box box) {
-        // Get new (x,y) position
+    public void moveWithCollisionDetection(Box box, Rock rock) {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-        // Detect collision and react
         if (ballX + ballRadius > box.xMax) {
             ballSpeedX = -ballSpeedX;
             ballX = box.xMax-ballRadius;
@@ -48,6 +53,13 @@ public class Ball {
             ballSpeedY = -ballSpeedY;
             ballY = box.yMin + ballRadius;
             randomColor();
+        }
+
+        //Detect collision with rock
+        if(ballBounds.contains(rock.rockBounds)){
+            ballDead = true;
+            ballSpeedX = 0;
+            ballSpeedY = 0;
         }
     }
     public void randomColor() {

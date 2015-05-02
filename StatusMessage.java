@@ -6,6 +6,7 @@ package com.example.benjaminhoover.dodgeball;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.text.format.Time;
 
 import java.util.Formatter;
 
@@ -13,17 +14,25 @@ public class StatusMessage {
     private StringBuilder statusMsg = new StringBuilder();
     private Formatter formatter = new Formatter(statusMsg);
     private Paint paint;
-
+    private float startTime;
+    private Time time;
     public StatusMessage(int color) {
         paint = new Paint();
         paint.setTypeface(Typeface.MONOSPACE);
-        paint.setTextSize(48);
+        paint.setTextSize(30);
         paint.setColor(color);
+        startTime = 0;
     }
 
     public void update(Ball ball) {
         statusMsg.delete(0,statusMsg.length());
-        formatter.format("Ball@(%3.0f,%3.0f),Speed=(%2.0f,%2.0f)", ball.ballX, ball.ballY, ball.ballSpeedX, ball.ballSpeedY);
+        if(ball.ballDead){
+        }else{
+            if(ball.start){
+                startTime += Time.SECOND;
+            }
+        }
+        formatter.format("Score: %2.0f", startTime);
     }
 
     public void draw(Canvas canvas) {
